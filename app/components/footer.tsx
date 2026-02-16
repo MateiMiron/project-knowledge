@@ -15,7 +15,7 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4 text-sm">
             <a
-              href="https://github.com"
+              href="https://github.com/MateiMiron/project-knowledge"
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-500 hover:text-slate-700 transition-colors"

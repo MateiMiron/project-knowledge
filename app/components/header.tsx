@@ -14,7 +14,7 @@ export function Header() {
         </div>
         <div className="flex items-center gap-4">
           <a
-            href="https://github.com"
+            href="https://github.com/MateiMiron/project-knowledge"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
