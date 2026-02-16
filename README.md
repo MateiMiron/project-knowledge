@@ -2,7 +2,7 @@
 
 AI-powered knowledge base that consolidates scattered team knowledge from Jira, Wiki, Contracts, and Slack into one searchable interface. Ask questions in plain English, get answers with source attribution.
 
-**Live Demo:** [your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)
+**Live Demo:** [project-knowledge.vercel.app](https://project-knowledge.vercel.app)
 
 ## What This Does
 
