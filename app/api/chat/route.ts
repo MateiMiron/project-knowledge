@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     );
 
     // Stream response from Groq
-    const result = await streamGroqResponse(systemPrompt);
+    const result = await streamGroqResponse(systemPrompt, userMessage);
 
     // Return streaming response with sources in a custom header
     const response = result.toDataStreamResponse();
@@ -59,6 +59,7 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     console.error("Chat API error:", error);
+    console.error(error instanceof Error ? error.message : String(error));
     return new Response(
       JSON.stringify({ error: "Something went wrong. Please try again." }),
       { status: 500, headers: { "Content-Type": "application/json" } }

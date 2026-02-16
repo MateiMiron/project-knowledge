@@ -44,10 +44,7 @@ Rules:
 
 Context from the knowledge base:
 
-${context}
-
----
-User question: ${userQuery}`;
+${context}`;
 
   return { systemPrompt, sources };
 }
