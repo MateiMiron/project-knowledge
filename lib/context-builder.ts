@@ -34,7 +34,16 @@ ${result.chunkText}`
     sourceId: r.resourceSourceId,
   }));
 
-  const systemPrompt = `You are a helpful knowledge assistant for an e-commerce payments engineering team. Answer questions based on the provided context from the team's Jira tickets, wiki pages, contracts, and Slack conversations.
+  const noContextFallback = `No specific documents matched your query. This knowledge base contains information about:
+- **Jira Tickets** (PAY-101 to PAY-110): Stripe integration, Apple Pay, refund automation, checkout bugs, PCI compliance, fraud detection, load testing
+- **Wiki Pages**: Payment Gateway Guide, PCI Compliance Checklist, Incident Playbook, Onboarding Guide, Payment API Docs, ADR: Why Stripe, Testing Strategy, Release Process
+- **Contracts**: Stripe Processing Agreement, Delivery Partner Agreement, AWS Infrastructure Agreement, Data Processing Agreement (GDPR)
+- **Slack Threads**: Refund edge cases, Apple Pay timeline, payment outage incident, test environment setup, crypto payments decision
+
+Try asking something specific like "What's our SLA for payment processing?" or "How do we handle failed payment retries?"`;
+
+  const systemPrompt = uniqueResults.length > 0
+    ? `You are a helpful knowledge assistant for an e-commerce payments engineering team. Answer questions based on the provided context from the team's Jira tickets, wiki pages, contracts, and Slack conversations.
 
 Rules:
 - Only answer based on the provided context. If the context doesn't contain enough information, say so clearly.
@@ -44,7 +53,8 @@ Rules:
 
 Context from the knowledge base:
 
-${context}`;
+${context}`
+    : `You are a helpful knowledge assistant for an e-commerce payments engineering team. The user's query didn't match any specific documents. Respond with EXACTLY the following message (keep the markdown formatting):\n\n${noContextFallback}`;
 
   return { systemPrompt, sources };
 }
