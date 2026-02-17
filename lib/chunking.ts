@@ -149,3 +149,35 @@ export function formatSupportTicketForEmbedding(ticket: {
     .join("\n\n");
   return `[Support Ticket - ${ticket.category}] ${ticket.id}: ${ticket.subject}\nCustomer: ${ticket.customer} | Priority: ${ticket.priority} | Status: ${ticket.status}\n\n${msgs}`;
 }
+
+export function formatApiTestForEmbedding(test: {
+  id: string;
+  suite: string;
+  endpoint: string;
+  method: string;
+  status: string;
+  coverage: string;
+  tests: Array<{ name: string; status: string; duration: string; description: string }>;
+  notes: string;
+}): string {
+  const testLines = test.tests
+    .map((t) => `[${t.status.toUpperCase()}] ${t.name} (${t.duration})\n${t.description}`)
+    .join("\n\n");
+  return `[API Test Suite - ${test.status.toUpperCase()}] ${test.id}: ${test.suite}\nEndpoint: ${test.method} ${test.endpoint} | Coverage: ${test.coverage}\n\n${testLines}\n\nNotes: ${test.notes}`;
+}
+
+export function formatE2eScenarioForEmbedding(scenario: {
+  id: string;
+  title: string;
+  flow: string;
+  priority: string;
+  status: string;
+  duration: string;
+  steps: Array<{ step: number; action: string; expected: string; status: string }>;
+  notes: string;
+}): string {
+  const stepLines = scenario.steps
+    .map((s) => `Step ${s.step} [${s.status.toUpperCase()}]: ${s.action}\nExpected: ${s.expected}`)
+    .join("\n\n");
+  return `[E2E Scenario - ${scenario.priority.toUpperCase()}] ${scenario.id}: ${scenario.title}\nFlow: ${scenario.flow} | Status: ${scenario.status} | Duration: ${scenario.duration}\n\n${stepLines}\n\nNotes: ${scenario.notes}`;
+}

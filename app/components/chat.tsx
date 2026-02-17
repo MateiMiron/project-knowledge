@@ -75,7 +75,7 @@ export function Chat() {
   };
 
   return (
-    <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border shadow-sm overflow-hidden" role="region" aria-label="Knowledge Base Chat">
       <div className="border-b px-4 py-3 flex items-center justify-between bg-slate-50/50">
         <h2 className="text-sm font-semibold text-slate-700">
           Knowledge Base Chat
@@ -87,7 +87,7 @@ export function Chat() {
         )}
       </div>
 
-      <div className="h-[500px] overflow-y-auto p-4 space-y-4">
+      <div className="h-[500px] overflow-y-auto p-4 space-y-4" aria-live="polite" aria-label="Chat messages">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-slate-400">
             <p className="text-sm mb-6">
@@ -112,9 +112,9 @@ export function Chat() {
           ))
         )}
         {isLoading && messages[messages.length - 1]?.role === "user" && (
-          <div className="flex gap-3">
+          <div className="flex gap-3" role="status" aria-label="Generating response">
             <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-              <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
+              <Loader2 className="h-4 w-4 text-blue-600 animate-spin" aria-hidden="true" />
             </div>
             <div className="bg-white border rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
               <div className="flex items-center gap-1">
@@ -134,21 +134,27 @@ export function Chat() {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={onSubmit} className="border-t p-3 flex gap-2">
+      <form onSubmit={onSubmit} className="border-t p-3 flex gap-2" aria-label="Chat input">
+        <label htmlFor="chat-input" className="sr-only">
+          Ask a question about the payments team knowledge base
+        </label>
         <input
+          id="chat-input"
           type="text"
           value={input}
           onChange={handleInputChange}
           placeholder="Ask anything about the payments team..."
+          maxLength={2000}
           className="flex-1 px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
+          aria-label="Send message"
           className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
-          <Send className="h-4 w-4" />
+          <Send className="h-4 w-4" aria-hidden="true" />
           <span className="text-sm hidden sm:inline">Send</span>
         </button>
       </form>

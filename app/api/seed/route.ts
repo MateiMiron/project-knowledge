@@ -11,6 +11,8 @@ import {
   formatMeetingForEmbedding,
   formatPostmortemForEmbedding,
   formatSupportTicketForEmbedding,
+  formatApiTestForEmbedding,
+  formatE2eScenarioForEmbedding,
 } from "@/lib/chunking";
 import { jiraTickets } from "@/lib/seed-data/jira-tickets";
 import { wikiPages } from "@/lib/seed-data/wiki-pages";
@@ -20,6 +22,8 @@ import { emails } from "@/lib/seed-data/emails";
 import { meetingNotes } from "@/lib/seed-data/meeting-notes";
 import { postmortems } from "@/lib/seed-data/postmortems";
 import { supportTickets } from "@/lib/seed-data/support-tickets";
+import { apiTests } from "@/lib/seed-data/api-tests";
+import { e2eScenarios } from "@/lib/seed-data/e2e-scenarios";
 
 export const maxDuration = 300;
 
@@ -56,10 +60,13 @@ async function seedItems(
 }
 
 export async function POST(req: Request) {
+  // Accept secret via Authorization header (preferred) or query param (legacy)
+  const authHeader = req.headers.get("authorization");
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
   const { searchParams } = new URL(req.url);
-  const secret = searchParams.get("secret");
+  const secret = bearerToken || searchParams.get("secret");
 
-  if (secret !== process.env.SEED_SECRET) {
+  if (!secret || secret !== process.env.SEED_SECRET) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -131,6 +138,20 @@ export async function POST(req: Request) {
         content: formatSupportTicketForEmbedding(t),
         metadata: t as unknown as Record<string, unknown>,
       })),
+      ...apiTests.map((t) => ({
+        type: "api-test",
+        sourceId: t.id,
+        title: t.suite,
+        content: formatApiTestForEmbedding(t),
+        metadata: t as unknown as Record<string, unknown>,
+      })),
+      ...e2eScenarios.map((s) => ({
+        type: "e2e",
+        sourceId: s.id,
+        title: s.title,
+        content: formatE2eScenarioForEmbedding(s),
+        metadata: s as unknown as Record<string, unknown>,
+      })),
     ];
 
     await seedItems(allItems, stats);
@@ -150,8 +171,7 @@ export async function POST(req: Request) {
     console.error("Seed error:", error);
     return new Response(
       JSON.stringify({
-        error: "Seed failed",
-        details: error instanceof Error ? error.message : String(error),
+        error: "Seed failed. Check server logs for details.",
       }),
       {
         status: 500,

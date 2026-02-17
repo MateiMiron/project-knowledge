@@ -10,6 +10,8 @@ import {
   Calendar,
   AlertTriangle,
   Headphones,
+  FlaskConical,
+  Route,
   ChevronDown,
   ChevronRight,
   Loader2,
@@ -77,9 +79,21 @@ const TYPE_CONFIG: Record<
     color: "text-orange-600",
     bg: "bg-orange-50 border-orange-200",
   },
+  "api-test": {
+    label: "API Tests",
+    icon: FlaskConical,
+    color: "text-indigo-600",
+    bg: "bg-indigo-50 border-indigo-200",
+  },
+  e2e: {
+    label: "E2E Scenarios",
+    icon: Route,
+    color: "text-teal-600",
+    bg: "bg-teal-50 border-teal-200",
+  },
 };
 
-const TYPE_ORDER = ["jira", "wiki", "contract", "slack", "email", "meeting", "postmortem", "support"];
+const TYPE_ORDER = ["jira", "wiki", "contract", "slack", "email", "meeting", "postmortem", "support", "api-test", "e2e"];
 
 function ResourceCard({
   resource,
@@ -157,6 +171,14 @@ function MetadataBadges({
     if (metadata.priority) badges.push(String(metadata.priority));
     if (metadata.status) badges.push(String(metadata.status));
     if (metadata.category) badges.push(String(metadata.category));
+  } else if (type === "api-test") {
+    if (metadata.status) badges.push(String(metadata.status));
+    if (metadata.coverage) badges.push(String(metadata.coverage));
+    if (metadata.method) badges.push(String(metadata.method));
+  } else if (type === "e2e") {
+    if (metadata.priority) badges.push(String(metadata.priority));
+    if (metadata.status) badges.push(String(metadata.status));
+    if (metadata.duration) badges.push(String(metadata.duration));
   }
 
   if (badges.length === 0) return null;

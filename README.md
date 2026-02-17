@@ -1,6 +1,6 @@
 # Project Knowledge
 
-AI-powered knowledge base that consolidates scattered team knowledge from Jira, Wiki, Contracts, and Slack into one searchable interface. Ask questions in plain English, get answers with source attribution.
+AI-powered knowledge base that consolidates scattered team knowledge from Jira, Wiki, Contracts, Slack, Emails, Meeting Notes, Postmortems, Support Tickets, API Tests, and E2E Scenarios into one searchable interface. Ask questions in plain English, get answers with source attribution.
 
 **Live Demo:** [project-knowledge.vercel.app](https://project-knowledge.vercel.app)
 
@@ -16,7 +16,7 @@ The system retrieves relevant documents from multiple sources, synthesizes an an
 
 ## Demo Data
 
-Pre-loaded with 27 realistic documents for a fictional e-commerce payments team:
+Pre-loaded with 55 realistic documents for a fictional e-commerce payments team:
 
 | Source Type | Count | Examples |
 |-------------|-------|---------|
@@ -24,6 +24,12 @@ Pre-loaded with 27 realistic documents for a fictional e-commerce payments team:
 | Wiki Pages | 8 | API docs, onboarding guide, incident playbook, ADRs |
 | Contracts | 4 | Stripe SLA, delivery partner agreement, AWS infra, GDPR DPA |
 | Slack Threads | 5 | Refund edge cases, outage incident, product decisions |
+| Emails | 5 | Migration announcements, PCI audit, Apple Pay go/no-go, performance reports |
+| Meeting Notes | 4 | Sprint planning, architecture reviews, retrospectives, stakeholder reviews |
+| Postmortems | 3 | Black Friday outage, double charge incident, PCI data exposure |
+| Support Tickets | 5 | Billing disputes, technical inquiries, refund requests, security concerns |
+| API Tests | 5 | Payment intents, refund processing, Apple Pay tokens, webhooks, fraud detection |
+| E2E Scenarios | 6 | Full checkout, Apple Pay flow, refund flow, retry recovery, PCI validation, flash sale |
 
 All documents cross-reference each other to demonstrate multi-source knowledge synthesis.
 
@@ -100,7 +106,7 @@ curl -X POST "http://localhost:3000/api/seed?secret=your-seed-secret"
 ```
 
 This will:
-- Insert all 27 demo documents
+- Insert all 55 demo documents
 - Generate embeddings for each chunk using Transformers.js
 - Store everything in your Postgres database
 
@@ -127,6 +133,7 @@ https://your-app.vercel.app
 
 API endpoints:
 - `POST /api/chat` - RAG query endpoint (streaming)
+- `GET /api/resources` - Browse all source documents
 - `POST /api/seed?secret=xxx` - Database seeder (protected)
 
 ## How It Works
@@ -168,7 +175,13 @@ project-knowledge/
 │       ├── jira-tickets.ts         # 10 Jira tickets
 │       ├── wiki-pages.ts           # 8 wiki pages
 │       ├── contracts.ts            # 4 contracts
-│       └── slack-threads.ts        # 5 Slack threads
+│       ├── slack-threads.ts        # 5 Slack threads
+│       ├── emails.ts               # 5 emails
+│       ├── meeting-notes.ts        # 4 meeting notes
+│       ├── postmortems.ts          # 3 postmortems
+│       ├── support-tickets.ts      # 5 support tickets
+│       ├── api-tests.ts            # 5 API test suites
+│       └── e2e-scenarios.ts        # 6 E2E test scenarios
 ├── discovery.md                    # Research & decisions
 ├── plan.md                         # Implementation plan
 └── progress.md                     # Implementation checklist

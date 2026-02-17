@@ -17,6 +17,13 @@ export async function POST(req: Request) {
       );
     }
 
+    if (userMessage.length > 2000) {
+      return new Response(
+        JSON.stringify({ error: "Message too long. Please keep it under 2,000 characters." }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     // Rate limiting by IP
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||

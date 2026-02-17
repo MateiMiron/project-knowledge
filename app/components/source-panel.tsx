@@ -1,4 +1,4 @@
-import { FileText, BookOpen, ScrollText, MessageSquare, Mail, Calendar, AlertTriangle, Headphones } from "lucide-react";
+import { FileText, BookOpen, ScrollText, MessageSquare, Mail, Calendar, AlertTriangle, Headphones, FlaskConical, Route } from "lucide-react";
 
 interface Source {
   id: string;
@@ -50,6 +50,16 @@ const typeConfig: Record<
     label: "Support",
     icon: Headphones,
     color: "bg-orange-100 text-orange-700 border-orange-200",
+  },
+  "api-test": {
+    label: "API Test",
+    icon: FlaskConical,
+    color: "bg-indigo-100 text-indigo-700 border-indigo-200",
+  },
+  e2e: {
+    label: "E2E",
+    icon: Route,
+    color: "bg-teal-100 text-teal-700 border-teal-200",
   },
 };
 

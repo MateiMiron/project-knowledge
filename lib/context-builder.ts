@@ -39,11 +39,17 @@ ${result.chunkText}`
 - **Wiki Pages**: Payment Gateway Guide, PCI Compliance Checklist, Incident Playbook, Onboarding Guide, Payment API Docs, ADR: Why Stripe, Testing Strategy, Release Process
 - **Contracts**: Stripe Processing Agreement, Delivery Partner Agreement, AWS Infrastructure Agreement, Data Processing Agreement (GDPR)
 - **Slack Threads**: Refund edge cases, Apple Pay timeline, payment outage incident, test environment setup, crypto payments decision
+- **Emails**: Migration announcements, PCI audit findings, Apple Pay go/no-go, Q1 performance reports, EU DPA requirements
+- **Meeting Notes**: Sprint planning, architecture reviews, retrospectives, stakeholder reviews
+- **Postmortems**: Black Friday outage (SEV-1), double charge incident (SEV-2), PCI data exposure (SEV-2)
+- **Support Tickets**: Billing disputes, technical inquiries, refund requests, security concerns
+- **API Tests**: Payment intent creation, refund processing, Apple Pay tokens, webhook verification, fraud detection scoring
+- **E2E Scenarios**: Full checkout flow, Apple Pay checkout, refund processing, failed payment recovery, PCI security validation, flash sale load testing
 
-Try asking something specific like "What's our SLA for payment processing?" or "How do we handle failed payment retries?"`;
+Try asking something specific like "What's our SLA for payment processing?" or "What API tests cover the refund flow?"`;
 
   const systemPrompt = uniqueResults.length > 0
-    ? `You are a helpful knowledge assistant for an e-commerce payments engineering team. Answer questions based on the provided context from the team's Jira tickets, wiki pages, contracts, and Slack conversations.
+    ? `You are a helpful knowledge assistant for an e-commerce payments engineering team. Answer questions based on the provided context from the team's Jira tickets, wiki pages, contracts, Slack conversations, emails, meeting notes, postmortems, support tickets, API tests, and E2E scenarios.
 
 Rules:
 - Only answer based on the provided context. If the context doesn't contain enough information, say so clearly.
