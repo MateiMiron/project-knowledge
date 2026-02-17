@@ -14,8 +14,9 @@ export default function HomePage() {
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Stop searching across 15 different tools. Ask questions about your
-            team&apos;s Jira tickets, wiki pages, contracts, and Slack
-            conversations in one place.
+            team&apos;s Jira tickets, wiki pages, contracts, Slack threads,
+            emails, meeting notes, postmortems, support tickets, API tests,
+            and E2E scenarios in one place.
           </p>
         </div>
         <StatsBar />
