@@ -60,6 +60,7 @@ export function MainTabs() {
         role="tabpanel"
         id={activeTab === "chat" ? "panel-chat" : "panel-sources"}
         aria-labelledby={activeTab === "chat" ? "tab-chat" : "tab-sources"}
+        className="min-h-[610px]"
       >
         {activeTab === "chat" ? (
           <Chat onSourceClick={handleSourceClick} />
