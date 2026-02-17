@@ -1,6 +1,6 @@
 import { Header } from "./components/header";
 import { StatsBar } from "./components/stats-bar";
-import { Chat } from "./components/chat";
+import { MainTabs } from "./components/main-tabs";
 import { Footer } from "./components/footer";
 
 export default function HomePage() {
@@ -19,7 +19,7 @@ export default function HomePage() {
           </p>
         </div>
         <StatsBar />
-        <Chat />
+        <MainTabs />
       </main>
       <Footer />
     </div>
