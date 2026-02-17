@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { resources } from "@/lib/db/schema";
 import { asc } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const allResources = await db
