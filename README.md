@@ -1,8 +1,9 @@
-# Project Knowledge
+# TeamBrain
 
 AI-powered knowledge base that consolidates scattered team knowledge from Jira, Wiki, Contracts, Slack, Emails, Meeting Notes, Postmortems, Support Tickets, API Tests, and E2E Scenarios into one searchable interface. Ask questions in plain English, get answers with source attribution.
 
 **Live Demo:** [project-knowledge.vercel.app](https://project-knowledge.vercel.app)
+**Author:** [Matei Miron](https://www.linkedin.com/in/miron-matei/)
 
 ## What This Does
 
@@ -202,6 +203,10 @@ For production self-hosted knowledge bases:
 
 - **[Onyx](https://github.com/onyx-dot-app/onyx)** (formerly Danswer) - Open source, self-hosted, connects to Jira/Confluence/Slack/Google Drive
 - **[AnythingLLM](https://github.com/Mintplex-Labs/anything-llm)** - Desktop app, fully local
+
+## Author
+
+Built by [Matei Miron](https://www.linkedin.com/in/miron-matei/)
 
 ## License
 
