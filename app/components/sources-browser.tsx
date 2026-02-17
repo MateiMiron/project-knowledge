@@ -6,6 +6,10 @@ import {
   BookOpen,
   ScrollText,
   MessageSquare,
+  Mail,
+  Calendar,
+  AlertTriangle,
+  Headphones,
   ChevronDown,
   ChevronRight,
   Loader2,
@@ -49,9 +53,33 @@ const TYPE_CONFIG: Record<
     color: "text-purple-600",
     bg: "bg-purple-50 border-purple-200",
   },
+  email: {
+    label: "Emails",
+    icon: Mail,
+    color: "text-rose-600",
+    bg: "bg-rose-50 border-rose-200",
+  },
+  meeting: {
+    label: "Meetings",
+    icon: Calendar,
+    color: "text-cyan-600",
+    bg: "bg-cyan-50 border-cyan-200",
+  },
+  postmortem: {
+    label: "Postmortems",
+    icon: AlertTriangle,
+    color: "text-red-600",
+    bg: "bg-red-50 border-red-200",
+  },
+  support: {
+    label: "Support",
+    icon: Headphones,
+    color: "text-orange-600",
+    bg: "bg-orange-50 border-orange-200",
+  },
 };
 
-const TYPE_ORDER = ["jira", "wiki", "contract", "slack"];
+const TYPE_ORDER = ["jira", "wiki", "contract", "slack", "email", "meeting", "postmortem", "support"];
 
 function ResourceCard({
   resource,
@@ -117,6 +145,18 @@ function MetadataBadges({
     if (metadata.vendor) badges.push(String(metadata.vendor));
   } else if (type === "slack") {
     if (metadata.channel) badges.push(`#${metadata.channel}`);
+  } else if (type === "email") {
+    if (metadata.from) badges.push(String(metadata.from).split("<")[0].trim());
+  } else if (type === "meeting") {
+    if (metadata.type) badges.push(String(metadata.type));
+    if (metadata.duration) badges.push(String(metadata.duration));
+  } else if (type === "postmortem") {
+    if (metadata.severity) badges.push(String(metadata.severity));
+    if (metadata.duration) badges.push(String(metadata.duration));
+  } else if (type === "support") {
+    if (metadata.priority) badges.push(String(metadata.priority));
+    if (metadata.status) badges.push(String(metadata.status));
+    if (metadata.category) badges.push(String(metadata.category));
   }
 
   if (badges.length === 0) return null;

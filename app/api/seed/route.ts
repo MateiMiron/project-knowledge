@@ -7,16 +7,55 @@ import {
   formatWikiForEmbedding,
   formatContractForEmbedding,
   formatSlackForEmbedding,
+  formatEmailForEmbedding,
+  formatMeetingForEmbedding,
+  formatPostmortemForEmbedding,
+  formatSupportTicketForEmbedding,
 } from "@/lib/chunking";
 import { jiraTickets } from "@/lib/seed-data/jira-tickets";
 import { wikiPages } from "@/lib/seed-data/wiki-pages";
 import { contracts } from "@/lib/seed-data/contracts";
 import { slackThreads } from "@/lib/seed-data/slack-threads";
+import { emails } from "@/lib/seed-data/emails";
+import { meetingNotes } from "@/lib/seed-data/meeting-notes";
+import { postmortems } from "@/lib/seed-data/postmortems";
+import { supportTickets } from "@/lib/seed-data/support-tickets";
 
 export const maxDuration = 300;
 
+async function seedItems(
+  items: Array<{ type: string; sourceId: string; title: string; content: string; metadata: Record<string, unknown> }>,
+  stats: { resources: number; chunks: number; types: Record<string, number> }
+) {
+  for (const item of items) {
+    const [resource] = await db
+      .insert(resources)
+      .values({
+        type: item.type,
+        sourceId: item.sourceId,
+        title: item.title,
+        content: item.content,
+        metadata: item.metadata,
+      })
+      .returning({ id: resources.id });
+
+    const chunks = chunkText(item.content);
+    for (const chunk of chunks) {
+      const embedding = await generateEmbedding(chunk.text);
+      await db.insert(embeddings).values({
+        resourceId: resource.id,
+        chunkText: chunk.text,
+        chunkIndex: chunk.index,
+        embedding: JSON.stringify(embedding),
+      });
+      stats.chunks++;
+    }
+    stats.resources++;
+    stats.types[item.type] = (stats.types[item.type] || 0) + 1;
+  }
+}
+
 export async function POST(req: Request) {
-  // Protect with secret
   const { searchParams } = new URL(req.url);
   const secret = searchParams.get("secret");
 
@@ -28,127 +67,73 @@ export async function POST(req: Request) {
   }
 
   try {
-    const stats = { resources: 0, chunks: 0, types: { jira: 0, wiki: 0, contract: 0, slack: 0 } };
+    const stats = { resources: 0, chunks: 0, types: {} as Record<string, number> };
 
     // Clear existing data
     await db.delete(embeddings);
     await db.delete(resources);
 
-    // Process Jira tickets
-    for (const ticket of jiraTickets) {
-      const content = formatJiraForEmbedding(ticket);
-      const [resource] = await db
-        .insert(resources)
-        .values({
-          type: "jira",
-          sourceId: ticket.id,
-          title: ticket.title,
-          content,
-          metadata: ticket as unknown as Record<string, unknown>,
-        })
-        .returning({ id: resources.id });
+    // Prepare all items
+    const allItems = [
+      ...jiraTickets.map((t) => ({
+        type: "jira",
+        sourceId: t.id,
+        title: t.title,
+        content: formatJiraForEmbedding(t),
+        metadata: t as unknown as Record<string, unknown>,
+      })),
+      ...wikiPages.map((p) => ({
+        type: "wiki",
+        sourceId: p.id,
+        title: p.title,
+        content: formatWikiForEmbedding(p),
+        metadata: p as unknown as Record<string, unknown>,
+      })),
+      ...contracts.map((c) => ({
+        type: "contract",
+        sourceId: c.id,
+        title: c.title,
+        content: formatContractForEmbedding(c),
+        metadata: c as unknown as Record<string, unknown>,
+      })),
+      ...slackThreads.map((t) => ({
+        type: "slack",
+        sourceId: t.id,
+        title: t.topic,
+        content: formatSlackForEmbedding(t),
+        metadata: t as unknown as Record<string, unknown>,
+      })),
+      ...emails.map((e) => ({
+        type: "email",
+        sourceId: e.id,
+        title: e.subject,
+        content: formatEmailForEmbedding(e),
+        metadata: e as unknown as Record<string, unknown>,
+      })),
+      ...meetingNotes.map((m) => ({
+        type: "meeting",
+        sourceId: m.id,
+        title: m.title,
+        content: formatMeetingForEmbedding(m),
+        metadata: m as unknown as Record<string, unknown>,
+      })),
+      ...postmortems.map((p) => ({
+        type: "postmortem",
+        sourceId: p.id,
+        title: p.title,
+        content: formatPostmortemForEmbedding(p),
+        metadata: p as unknown as Record<string, unknown>,
+      })),
+      ...supportTickets.map((t) => ({
+        type: "support",
+        sourceId: t.id,
+        title: t.subject,
+        content: formatSupportTicketForEmbedding(t),
+        metadata: t as unknown as Record<string, unknown>,
+      })),
+    ];
 
-      const chunks = chunkText(content);
-      for (const chunk of chunks) {
-        const embedding = await generateEmbedding(chunk.text);
-        await db.insert(embeddings).values({
-          resourceId: resource.id,
-          chunkText: chunk.text,
-          chunkIndex: chunk.index,
-          embedding: JSON.stringify(embedding),
-        });
-        stats.chunks++;
-      }
-      stats.resources++;
-      stats.types.jira++;
-    }
-
-    // Process Wiki pages
-    for (const page of wikiPages) {
-      const content = formatWikiForEmbedding(page);
-      const [resource] = await db
-        .insert(resources)
-        .values({
-          type: "wiki",
-          sourceId: page.id,
-          title: page.title,
-          content,
-          metadata: page as unknown as Record<string, unknown>,
-        })
-        .returning({ id: resources.id });
-
-      const chunks = chunkText(content);
-      for (const chunk of chunks) {
-        const embedding = await generateEmbedding(chunk.text);
-        await db.insert(embeddings).values({
-          resourceId: resource.id,
-          chunkText: chunk.text,
-          chunkIndex: chunk.index,
-          embedding: JSON.stringify(embedding),
-        });
-        stats.chunks++;
-      }
-      stats.resources++;
-      stats.types.wiki++;
-    }
-
-    // Process Contracts
-    for (const contract of contracts) {
-      const content = formatContractForEmbedding(contract);
-      const [resource] = await db
-        .insert(resources)
-        .values({
-          type: "contract",
-          sourceId: contract.id,
-          title: contract.title,
-          content,
-          metadata: contract as unknown as Record<string, unknown>,
-        })
-        .returning({ id: resources.id });
-
-      const chunks = chunkText(content);
-      for (const chunk of chunks) {
-        const embedding = await generateEmbedding(chunk.text);
-        await db.insert(embeddings).values({
-          resourceId: resource.id,
-          chunkText: chunk.text,
-          chunkIndex: chunk.index,
-          embedding: JSON.stringify(embedding),
-        });
-        stats.chunks++;
-      }
-      stats.resources++;
-      stats.types.contract++;
-    }
-
-    // Process Slack threads
-    for (const thread of slackThreads) {
-      const content = formatSlackForEmbedding(thread);
-      const [resource] = await db
-        .insert(resources)
-        .values({
-          type: "slack",
-          sourceId: thread.id,
-          title: thread.topic,
-          content,
-          metadata: thread as unknown as Record<string, unknown>,
-        })
-        .returning({ id: resources.id });
-
-      const chunks = chunkText(content);
-      for (const chunk of chunks) {
-        const embedding = await generateEmbedding(chunk.text);
-        await db.insert(embeddings).values({
-          resourceId: resource.id,
-          chunkText: chunk.text,
-          chunkIndex: chunk.index,
-          embedding: JSON.stringify(embedding),
-        });
-        stats.chunks++;
-      }
-      stats.resources++;
-      stats.types.slack++;
-    }
+    await seedItems(allItems, stats);
 
     return new Response(
       JSON.stringify({

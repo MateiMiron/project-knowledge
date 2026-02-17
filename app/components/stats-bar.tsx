@@ -3,19 +3,19 @@ import { FileText, FolderOpen, Search, Zap } from "lucide-react";
 const stats = [
   {
     label: "Documents",
-    value: "27",
+    value: "44",
     icon: FileText,
     color: "text-blue-600 bg-blue-50",
   },
   {
     label: "Source Types",
-    value: "4",
+    value: "8",
     icon: FolderOpen,
     color: "text-purple-600 bg-purple-50",
   },
   {
     label: "Searchable Chunks",
-    value: "150+",
+    value: "350+",
     icon: Search,
     color: "text-emerald-600 bg-emerald-50",
   },

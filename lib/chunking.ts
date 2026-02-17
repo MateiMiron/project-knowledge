@@ -101,3 +101,51 @@ export function formatSlackForEmbedding(thread: {
     .join("\n");
   return `[Slack - ${thread.channel}] ${thread.topic}\n\n${msgs}`;
 }
+
+export function formatEmailForEmbedding(email: {
+  id: string;
+  subject: string;
+  from: string;
+  to: string[];
+  date: string;
+  body: string;
+}): string {
+  return `[Email] ${email.id}: ${email.subject}\nFrom: ${email.from} | To: ${email.to.join(", ")} | Date: ${email.date}\n\n${email.body}`;
+}
+
+export function formatMeetingForEmbedding(meeting: {
+  id: string;
+  title: string;
+  date: string;
+  attendees: string[];
+  type: string;
+  notes: string;
+}): string {
+  return `[Meeting Notes - ${meeting.type}] ${meeting.id}: ${meeting.title}\nDate: ${meeting.date} | Attendees: ${meeting.attendees.join(", ")}\n\n${meeting.notes}`;
+}
+
+export function formatPostmortemForEmbedding(postmortem: {
+  id: string;
+  title: string;
+  severity: string;
+  incidentDate: string;
+  duration: string;
+  content: string;
+}): string {
+  return `[Postmortem - ${postmortem.severity}] ${postmortem.id}: ${postmortem.title}\nDate: ${postmortem.incidentDate} | Duration: ${postmortem.duration}\n\n${postmortem.content}`;
+}
+
+export function formatSupportTicketForEmbedding(ticket: {
+  id: string;
+  subject: string;
+  customer: string;
+  priority: string;
+  status: string;
+  category: string;
+  messages: Array<{ from: string; role: string; content: string }>;
+}): string {
+  const msgs = ticket.messages
+    .map((m) => `${m.from} (${m.role}): ${m.content}`)
+    .join("\n\n");
+  return `[Support Ticket - ${ticket.category}] ${ticket.id}: ${ticket.subject}\nCustomer: ${ticket.customer} | Priority: ${ticket.priority} | Status: ${ticket.status}\n\n${msgs}`;
+}
