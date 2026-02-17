@@ -291,7 +291,7 @@ export function SourcesBrowser({ navigateTarget, onNavigateComplete }: SourcesBr
       </div>
 
       {/* Document list */}
-      <div className="p-4 space-y-2 max-h-[500px] overflow-y-scroll">
+      <div className="p-4 space-y-2 max-h-[500px] overflow-y-auto">
         {currentResources.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-8">
             No documents found for this type.
