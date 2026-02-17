@@ -75,10 +75,10 @@ export function Chat({ onSourceClick }: { onSourceClick?: (source: { type: strin
   };
 
   return (
-    <div className="bg-white rounded-xl border shadow-sm overflow-hidden" role="region" aria-label="Knowledge Base Chat">
+    <div className="bg-white rounded-xl border shadow-sm overflow-hidden" role="region" aria-label="TeamBrain Chat">
       <div className="border-b px-4 py-3 flex items-center justify-between bg-slate-50/50">
         <h2 className="text-sm font-semibold text-slate-700">
-          Knowledge Base Chat
+          TeamBrain Chat
         </h2>
         {remaining !== null && (
           <span className="text-xs text-slate-500">

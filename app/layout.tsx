@@ -5,11 +5,11 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Project Knowledge - AI-Powered Team Knowledge Base",
+  title: "TeamBrain - AI-Powered Team Knowledge Base",
   description:
     "Consolidate scattered team knowledge from Jira, Wiki, Contracts, and Slack into one searchable AI-powered knowledge base. Ask questions in plain English, get answers with source attribution.",
   openGraph: {
-    title: "Project Knowledge",
+    title: "TeamBrain",
     description:
       "Demo: AI-powered knowledge base that consolidates Jira, Wiki, Contracts, and Slack",
     type: "website",

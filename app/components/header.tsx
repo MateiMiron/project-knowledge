@@ -1,15 +1,15 @@
 "use client";
 
-import { Database } from "lucide-react";
+import { Brain } from "lucide-react";
 
 export function Header() {
   return (
     <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto max-w-5xl px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Database className="h-5 w-5 text-blue-600" />
+          <Brain className="h-5 w-5 text-blue-600" />
           <span className="font-semibold text-slate-900">
-            Project Knowledge
+            TeamBrain
           </span>
         </div>
         <div className="flex items-center gap-4">

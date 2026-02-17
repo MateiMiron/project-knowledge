@@ -10,7 +10,7 @@ export default function HomePage() {
       <main className="container mx-auto max-w-5xl px-4 py-8">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-slate-900 mb-3">
-            Project Knowledge
+            TeamBrain
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Stop searching across 15 different tools. Ask questions about your
