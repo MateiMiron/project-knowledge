@@ -59,8 +59,8 @@ export async function POST(req: Request) {
     // Return streaming response with sources in a custom header
     const response = result.toDataStreamResponse();
 
-    // Add sources and rate limit info as headers
-    response.headers.set("X-Sources", JSON.stringify(sources));
+    // Add sources and rate limit info as headers (encode to handle non-ASCII chars like em-dashes)
+    response.headers.set("X-Sources", encodeURIComponent(JSON.stringify(sources)));
     response.headers.set("X-Rate-Remaining", String(rateLimit.remaining));
 
     return response;

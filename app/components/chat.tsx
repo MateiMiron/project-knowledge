@@ -27,7 +27,7 @@ export function Chat({ onSourceClick }: { onSourceClick?: (source: { type: strin
 
         if (sourcesHeader) {
           try {
-            const sources = JSON.parse(sourcesHeader) as Source[];
+            const sources = JSON.parse(decodeURIComponent(sourcesHeader)) as Source[];
             // We'll associate sources with the next assistant message
             const msgId = `pending-${Date.now()}`;
             setSourcesMap((prev) => ({ ...prev, [msgId]: sources }));
