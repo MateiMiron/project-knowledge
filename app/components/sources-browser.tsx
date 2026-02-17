@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   FileText,
   BookOpen,
@@ -197,11 +197,17 @@ function MetadataBadges({
   );
 }
 
-export function SourcesBrowser() {
+interface SourcesBrowserProps {
+  navigateTarget?: { type: string; id: string } | null;
+  onNavigateComplete?: () => void;
+}
+
+export function SourcesBrowser({ navigateTarget, onNavigateComplete }: SourcesBrowserProps) {
   const [resources, setResources] = useState<Record<string, Resource[]>>({});
   const [loading, setLoading] = useState(true);
   const [activeType, setActiveType] = useState("jira");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const highlightedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/resources")
@@ -212,6 +218,19 @@ export function SourcesBrowser() {
       })
       .catch(() => setLoading(false));
   }, []);
+
+  // Handle navigation from source badge click
+  useEffect(() => {
+    if (navigateTarget && !loading) {
+      setActiveType(navigateTarget.type);
+      setExpandedId(navigateTarget.id);
+      onNavigateComplete?.();
+      // Scroll to the card after render
+      setTimeout(() => {
+        highlightedRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    }
+  }, [navigateTarget, loading, onNavigateComplete]);
 
   if (loading) {
     return (
@@ -279,14 +298,18 @@ export function SourcesBrowser() {
           </p>
         ) : (
           currentResources.map((resource) => (
-            <ResourceCard
+            <div
               key={resource.id}
-              resource={resource}
-              isExpanded={expandedId === resource.id}
-              onToggle={() =>
-                setExpandedId(expandedId === resource.id ? null : resource.id)
-              }
-            />
+              ref={expandedId === resource.id ? highlightedRef : undefined}
+            >
+              <ResourceCard
+                resource={resource}
+                isExpanded={expandedId === resource.id}
+                onToggle={() =>
+                  setExpandedId(expandedId === resource.id ? null : resource.id)
+                }
+              />
+            </div>
           ))
         )}
       </div>

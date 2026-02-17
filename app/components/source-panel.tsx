@@ -63,7 +63,7 @@ const typeConfig: Record<
   },
 };
 
-export function SourcePanel({ sources }: { sources: Source[] }) {
+export function SourcePanel({ sources, onSourceClick }: { sources: Source[]; onSourceClick?: (source: { type: string; id: string }) => void }) {
   if (sources.length === 0) return null;
 
   return (
@@ -74,9 +74,12 @@ export function SourcePanel({ sources }: { sources: Source[] }) {
           const config = typeConfig[source.type] || typeConfig.jira;
           const Icon = config.icon;
           return (
-            <div
+            <button
               key={source.id}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.color}`}
+              type="button"
+              onClick={() => onSourceClick?.({ type: source.type, id: source.id })}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.color} hover:opacity-80 transition-opacity cursor-pointer`}
+              title={`View ${source.sourceId} in Browse Sources`}
             >
               <Icon className="h-3 w-3" />
               <span>{source.sourceId}</span>
@@ -84,7 +87,7 @@ export function SourcePanel({ sources }: { sources: Source[] }) {
               <span className="opacity-80 truncate max-w-[150px]">
                 {source.title}
               </span>
-            </div>
+            </button>
           );
         })}
       </div>

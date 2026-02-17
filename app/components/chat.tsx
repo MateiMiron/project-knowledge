@@ -13,7 +13,7 @@ interface Source {
   sourceId: string;
 }
 
-export function Chat() {
+export function Chat({ onSourceClick }: { onSourceClick?: (source: { type: string; id: string }) => void }) {
   const [sourcesMap, setSourcesMap] = useState<Record<string, Source[]>>({});
   const [remaining, setRemaining] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -108,6 +108,7 @@ export function Chat() {
                   ? getSourcesForMessage(idx)
                   : undefined
               }
+              onSourceClick={onSourceClick}
             />
           ))
         )}

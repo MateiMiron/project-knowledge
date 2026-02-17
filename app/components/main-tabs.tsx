@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { MessageSquareText, Database } from "lucide-react";
 import { Chat } from "./chat";
 import { SourcesBrowser } from "./sources-browser";
 
+export interface SourceNavigationTarget {
+  type: string;
+  id: string;
+}
+
 export function MainTabs() {
   const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
+  const [navigateTarget, setNavigateTarget] = useState<SourceNavigationTarget | null>(null);
+
+  const handleSourceClick = useCallback((source: { type: string; id: string }) => {
+    setNavigateTarget(source);
+    setActiveTab("sources");
+  }, []);
 
   return (
     <div>
@@ -50,7 +61,14 @@ export function MainTabs() {
         id={activeTab === "chat" ? "panel-chat" : "panel-sources"}
         aria-labelledby={activeTab === "chat" ? "tab-chat" : "tab-sources"}
       >
-        {activeTab === "chat" ? <Chat /> : <SourcesBrowser />}
+        {activeTab === "chat" ? (
+          <Chat onSourceClick={handleSourceClick} />
+        ) : (
+          <SourcesBrowser
+            navigateTarget={navigateTarget}
+            onNavigateComplete={() => setNavigateTarget(null)}
+          />
+        )}
       </div>
     </div>
   );

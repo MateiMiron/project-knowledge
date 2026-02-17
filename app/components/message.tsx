@@ -13,9 +13,10 @@ interface MessageProps {
   role: "user" | "assistant";
   content: string;
   sources?: Source[];
+  onSourceClick?: (source: { type: string; id: string }) => void;
 }
 
-export function Message({ role, content, sources }: MessageProps) {
+export function Message({ role, content, sources, onSourceClick }: MessageProps) {
   const isUser = role === "user";
 
   return (
@@ -68,7 +69,7 @@ export function Message({ role, content, sources }: MessageProps) {
             >
               {content}
             </ReactMarkdown>
-            {sources && sources.length > 0 && <SourcePanel sources={sources} />}
+            {sources && sources.length > 0 && <SourcePanel sources={sources} onSourceClick={onSourceClick} />}
           </div>
         )}
       </div>
